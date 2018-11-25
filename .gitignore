@@ -1,0 +1,8 @@
+*.vcxproj
+*.filters
+*.user
+*.yml
+*.xml
+*.dll
+Debug/
+x64/
