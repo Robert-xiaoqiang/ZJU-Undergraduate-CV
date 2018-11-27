@@ -19,6 +19,7 @@ public:
 	const static int maxImageSize = 10;
 	Calibrater(const std::array<std::string, Calibrater::maxImageSize>& imageFileList, const std::string& winname);
 	void workAndSave(const std::string& outFile) const;
+	void showDifference(const std::string& winname) const;
 	virtual ~Calibrater();
 private:
 	static cv::Size boardInnerSize;

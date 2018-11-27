@@ -1,10 +1,8 @@
 #include "Calibrater.h"
-
-#include <opencv2/core/base.hpp>
-
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cassert>
 
 cv::Size Calibrater::boardInnerSize = { 9, 7 };
 cv::Size Calibrater::squareSize = { 20, 20 };
@@ -37,10 +35,11 @@ void Calibrater::openFile(const std::array<std::string, Calibrater::maxImageSize
 		// subpixel corner point
 		// by 2-value image
 		// input, inout, size
-		cv::find4QuadCornerSubpix(tempGrayImage, curPoints, cv::Size(Calibrater::boardInnerSize.width, Calibrater::boardInnerSize.height));
+		//cv::find4QuadCornerSubpix(tempGrayImage, curPoints, cv::Size(11, 11));
+		cv::cornerSubPix(tempGrayImage, curPoints, cv::Size(Calibrater::boardInnerSize.width, Calibrater::boardInnerSize.height), cv::Size(-1, -1), cv::TermCriteria());
 		all2dCornerPoints.push_back(curPoints);
 		// show corner points
-		cv::drawChessboardCorners(tempGrayImage, Calibrater::boardInnerSize, curPoints, false);
+		cv::drawChessboardCorners(tempGrayImage, Calibrater::boardInnerSize, curPoints, true);
 		cv::imshow(winname, tempGrayImage);
 		cv::waitKey(1000);
 	}
@@ -48,17 +47,17 @@ void Calibrater::openFile(const std::array<std::string, Calibrater::maxImageSize
 
 void Calibrater::build3d()
 {
-	for(int k = 0; k < all2dCornerPoints.size(); k++) {
-		std::vector<cv::Point3f> cs;
-		for(int i = 0; i < Calibrater::boardInnerSize.width; i++)
-			for(int j = 0; j < Calibrater::boardInnerSize.height; j++) {
-				cv::Point3f cur = { static_cast<float>(i * Calibrater::squareSize.width), 
-									static_cast<float>(j * Calibrater::squareSize.height), 
-									0.0f };
-				cs.insert(cs.end(), cur);
-			}
-		all3dCornerPoints.push_back(cs);
-	}
+	assert(all2dCornerPoints.size() > 0);
+	all3dCornerPoints.clear();
+	std::vector<cv::Point3f> tempBuffer;
+	for(int i = 0; i < Calibrater::boardInnerSize.height; i++)
+		for(int j = 0; j < Calibrater::boardInnerSize.width; j++) {
+			cv::Point3f cur = { static_cast<float>(i * Calibrater::squareSize.height),
+				static_cast<float>(j * Calibrater::squareSize.width),
+				0.0f };
+			tempBuffer.insert(tempBuffer.end(), cur);
+		}
+	all3dCornerPoints.insert(all3dCornerPoints.end(), all2dCornerPoints.size(), tempBuffer);
 }
 
 void Calibrater::workAndSave(const std::string& fileName) const
@@ -130,5 +129,20 @@ void Calibrater::workAndSave(const std::string& fileName) const
 		cv::Mat dstImage;
 		cv::remap(curImage, dstImage, mapx, mapy, cv::INTER_LINEAR);
 		cv::imwrite(dstImageName, dstImage);
+	}
+}
+
+
+void Calibrater::showDifference(const std::string& winname) const
+{
+	cv::Mat dst;
+	for(int i = 0; i < srcImage.size(); i++) {
+		cv::Mat before = std::get<1>(srcImage[i]);
+		cv::Mat after = cv::imread("after_" + std::get<0>(srcImage[i]));
+		dst.create(before.rows, before.cols + 10 + after.cols, before.type());
+		before.copyTo(dst(cv::Rect(0, 0, before.cols, before.rows)));
+		after.copyTo(dst(cv::Rect(before.cols + 10, 0, after.cols, after.rows)));
+		cv::imshow(winname, dst);
+		cv::waitKey(2000);
 	}
 }
