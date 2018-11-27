@@ -60,7 +60,7 @@ void Calibrater::build3d()
 	all3dCornerPoints.insert(all3dCornerPoints.end(), all2dCornerPoints.size(), tempBuffer);
 }
 
-void Calibrater::workAndSave(const std::string& fileName) const
+void Calibrater::workAndSave(const std::string& fileName, const std::string& winname) const
 {
 	cv::Mat innerMatrix(3, 3, CV_32FC1, cv::Scalar::all(0.0));
 	cv::Mat distortionCoe(1, 5, CV_32FC1, cv::Scalar::all(0.0));
@@ -125,24 +125,16 @@ void Calibrater::workAndSave(const std::string& fileName) const
 	 */
 	for(int i = 0; i < srcImage.size(); i++) {
 		std::string dstImageName = "after_" + std::get<0>(srcImage[i]);
-		cv::Mat curImage = std::get<1>(srcImage[i]);
-		cv::Mat dstImage;
-		cv::remap(curImage, dstImage, mapx, mapy, cv::INTER_LINEAR);
-		cv::imwrite(dstImageName, dstImage);
-	}
-}
-
-
-void Calibrater::showDifference(const std::string& winname) const
-{
-	cv::Mat dst;
-	for(int i = 0; i < srcImage.size(); i++) {
 		cv::Mat before = std::get<1>(srcImage[i]);
-		cv::Mat after = cv::imread("after_" + std::get<0>(srcImage[i]));
+		cv::Mat after, dst;
+		cv::remap(before, after, mapx, mapy, cv::INTER_LINEAR);
 		dst.create(before.rows, before.cols + 10 + after.cols, before.type());
 		before.copyTo(dst(cv::Rect(0, 0, before.cols, before.rows)));
 		after.copyTo(dst(cv::Rect(before.cols + 10, 0, after.cols, after.rows)));
+		cv::putText(dst, "before", cv::Point2i(0, dst.rows - 10), cv::FONT_HERSHEY_SCRIPT_SIMPLEX, 1.0, cv::Scalar(255.0, 0.0, 0.0), 2, false);
+		cv::putText(dst, " after", cv::Point2i(before.cols, dst.rows - 10), cv::FONT_HERSHEY_SCRIPT_SIMPLEX, 1.0, cv::Scalar(255.0, 0.0, 0.0), 2, false);
 		cv::imshow(winname, dst);
 		cv::waitKey(2000);
+		cv::imwrite(dstImageName, dst);
 	}
 }
