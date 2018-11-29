@@ -1,0 +1,2 @@
+C:/msys64/mingw64/bin/ar.exe qc libCalibrater.a  CMakeFiles/Calibrater.dir/Calibrater.cpp.obj
+C:/msys64/mingw64/bin/ranlib.exe libCalibrater.a

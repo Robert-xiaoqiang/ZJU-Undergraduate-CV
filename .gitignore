@@ -3,7 +3,7 @@
 *.user
 *.yml
 *.xml
-*.dll
+# *.dll
 Debug/
 x64/
 image2/
