@@ -5,9 +5,9 @@
 ### build
 - prerequisites
    - OpenCV >= 2.4`(make sure it has been installed in PATH)`
-   - MinGW 7.1.0`(MSYS)`
+   - now, MinGW 7.1.0`(MSYS)`
 - build
-   - `cmake -G "MSYS Makefiles"`
+   - now, `cmake -G "MSYS Makefiles"`
    - `make`
 - run
    - `work <capture> or <calibrate>`
