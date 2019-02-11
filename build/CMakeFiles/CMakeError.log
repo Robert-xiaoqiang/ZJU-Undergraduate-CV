@@ -1,0 +1,13 @@
+Determining if the C compiler works failed with the following output:
+Change Dir: F:/2018program/OpenCV/Calibration3/Calibration3/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/msys64/mingw64/bin/make.exe" "cmTC_b7ba3/fast"
+C:/msys64/mingw64/bin/make.exe -f CMakeFiles/cmTC_b7ba3.dir/build.make CMakeFiles/cmTC_b7ba3.dir/build
+make.exe[1]: Entering directory 'F:/2018program/OpenCV/Calibration3/Calibration3/build/CMakeFiles/CMakeTmp'
+process_begin: CreateProcess(NULL, sh.exe -c "/F/CMake/bin/cmake.exe -E cmake_echo_color --switch= --progress-dir=/F/2018program/OpenCV/Calibration3/Calibration3/build/CMakeFiles/CMakeTmp/CMakeFiles --progress-num=1 Building C object CMakeFiles/cmTC_b7ba3.dir/testCCompiler.c.obj", ...) failed.
+make (e=2): ???????????
+make.exe[1]: *** [CMakeFiles/cmTC_b7ba3.dir/build.make:65: CMakeFiles/cmTC_b7ba3.dir/testCCompiler.c.obj] Error 2
+make.exe[1]: Leaving directory 'F:/2018program/OpenCV/Calibration3/Calibration3/build/CMakeFiles/CMakeTmp'
+make.exe: *** [Makefile:126: cmTC_b7ba3/fast] Error 2
+
+
