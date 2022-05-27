@@ -1,4 +1,4 @@
-# CVLearning000
+# Computer Vision of Undergraduate Curriculum at Zhejiang University
 
 ### principles
 - [some LaTex BUG](http://qindomitable.top/2018/11/14/CalibrationLearning.html)
